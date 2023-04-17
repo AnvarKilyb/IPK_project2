@@ -106,7 +106,7 @@ Clients on the left side of showcase. Server is on the right
 
 # Licences
 This project is licensed under the GNU General Public License - see the 
-[LICENSE]()
+[LICENSE](https://git.fit.vutbr.cz/xkilyb00/IPK_Project2/src/branch/master/LICENSE.md)
 file for details.
 
 ## Bibliography
