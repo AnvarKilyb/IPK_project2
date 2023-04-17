@@ -1,8 +1,11 @@
-build-client:
-	g++ client.cpp -o ipkcpc
+CC = g++
+CFLAGS = -g -Wall
+TARGET = server
 
-build-server:
-	g++ -g server.cpp -o ipkcpd
+all: $(TARGET)
+
+$(TARGET) : $(TARGET).cpp
+			$(CC) $(CFLAGS) -o ipkcpd $(TARGET).cpp
 
 clean:
-	rm ipkcpc
+	rm ipkcpd

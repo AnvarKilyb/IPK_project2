@@ -2,12 +2,10 @@
 #include <unistd.h>
 #include <sys/socket.h>
 #include <sys/types.h>
-#include <bits/stdc++.h>
+// #include <bits/stdc++.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>
-#include <cpuid.h>
 #include <string>
-#include <sstream>
 #include <regex>
 #include <csignal>
 
@@ -19,8 +17,7 @@
 // Occuring during SOLVE command
 #define TEXT_OK 0
 #define TEXT_WRONG_COMMAND -1
-#define TEXT_WRONG_OPERAND -2
-#define TEXT_WRONG_FORMAT -3
+#define TEXT_WRONG_FORMAT -2
 
 using namespace std;
 char buffer[BUFFERSIZE];
@@ -59,11 +56,11 @@ void check_args(int argc, char *argv[]){
                 MODE = optarg;
                 break;
             default:
-                print_err(("Usage: %s -h host -p port -m mode\n", argv[0]));
+                print_err("Usage: ./ipkcpd -h host -p port -m mode\n");
         }
     }
     if(HOST == NULL || PORT == 0 || MODE == NULL)
-        print_err(("Usage: %s -h host -p port -m mode\n", argv[0]));
+        print_err("Usage: ./ipkcpd -h host -p port -m mode\n");
     
     if (PORT < 1024)
         print_err("Invalid port number");
@@ -197,7 +194,7 @@ void run_udp(){
             result_data[2] = strlen(prep_data);
             strcat(prep_data, "Invalid argument\n");
             memcpy(result_data + 3, prep_data, strlen(prep_data));
-            cout << "\nInvalid lisp expression, sending to client wrong data" << endl << endl;
+            cout << "\nInvalid lisp expression, sending to client error code" << endl << endl;
             sendto(sockfd, result_data, strlen(prep_data) + 3, MSG_CONFIRM, (const struct sockaddr *) &cliaddr, len);
         }
     }
@@ -226,7 +223,6 @@ int main(int argc, char *argv[]){
 void event_handler(int sock){
     char buffer[BUFFERSIZE];
     int result = 0;
-    bool command_ok = false;
     // Parameter to determine server's state:
     // Init state = 0
     // Established state = 1
@@ -262,10 +258,6 @@ void event_handler(int sock){
                         break;
                     case TEXT_WRONG_FORMAT:
                         cout << connections << ":"  << "Received wrong SOLVE format from client, interrupting connection..." << endl << endl;
-                        send_message(sock, "BYE\n");
-                        break;
-                    case TEXT_WRONG_OPERAND:
-                        cout << connections << ":"  << "Received invalid operand at SOLVE from client, interrupting connection..." << endl << endl;
                         send_message(sock, "BYE\n");
                         break;
                 }
